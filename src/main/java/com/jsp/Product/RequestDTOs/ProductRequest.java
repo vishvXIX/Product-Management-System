@@ -1,4 +1,4 @@
-package com.jsp.Product.RequestDTOs;
+package com.jsp.Product.requestdtos;
 
 import lombok.Getter;
 import lombok.Setter;

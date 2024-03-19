@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.jsp.Product.Entity.Product;
-import com.jsp.Product.RequestDTOs.ProductRequest;
-import com.jsp.Product.Utility.ResponseStructure;
+import com.jsp.Product.requestdtos.ProductRequest;
+import com.jsp.Product.utility.ResponseStructure;
 
 public interface ProductService {
 
@@ -19,7 +19,6 @@ public interface ProductService {
 	ResponseEntity<ResponseStructure<Product>> updateProduct(int productId, Product product);
 
 	ResponseEntity<ResponseStructure<List<Product>>> findAllProducts();
-
 
 	
 }

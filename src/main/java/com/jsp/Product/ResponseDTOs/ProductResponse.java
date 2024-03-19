@@ -1,4 +1,4 @@
-package com.jsp.Product.ResponseDTOs;
+package com.jsp.Product.responsedtos;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class ProductResponse {
 
+	private int productId;
 	private String productName;
 	private String productPrice;
 	

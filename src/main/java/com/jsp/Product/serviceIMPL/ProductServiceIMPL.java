@@ -2,18 +2,16 @@ package com.jsp.Product.serviceIMPL;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.jsp.Product.Entity.Product;
 import com.jsp.Product.Exception.ProductNotFoundByIdException;
-import com.jsp.Product.RequestDTOs.ProductRequest;
-import com.jsp.Product.Utility.ResponseStructure;
 import com.jsp.Product.repository.ProductRepository;
+import com.jsp.Product.requestdtos.ProductRequest;
 import com.jsp.Product.service.ProductService;
+import com.jsp.Product.utility.ResponseStructure;
 
 @Service
 public class ProductServiceIMPL implements ProductService {
@@ -26,7 +24,7 @@ public class ProductServiceIMPL implements ProductService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<Product>> saveProduct(ProductRequest productRequest) {
-		Product product = repository.save(mapToProduct(productRequest));
+		Product product = repository.save(mapToProduct(productRequest, new Product()));
 
 		responseStructure.setStatus(HttpStatus.OK.value());
 		responseStructure.setMessage("Data saved successfully");
@@ -60,7 +58,7 @@ public class ProductServiceIMPL implements ProductService {
 				.map(product->{
 					ResponseStructure<Product> responseStructure = new ResponseStructure<>();
 					responseStructure.setStatus(HttpStatus.OK.value());
-					responseStructure.setMessage("product fatch susscessfully");
+					responseStructure.setMessage("product fetched susscessfully");
 					responseStructure.setData(product);
 					return new ResponseEntity<>(responseStructure,HttpStatus.OK);
 				})
@@ -77,18 +75,9 @@ public class ProductServiceIMPL implements ProductService {
 							.setMessage("Product update successfully!!")
 							.setData(existingProduct));
 				})
+				
 				.orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
 
-	}
-
-
-	private Product mapToProduct(ProductRequest request) {
-
-		Product products = new Product();
-		products.setProductName(request.getProductName());
-		products.setProductPrice(request.getProductPrice());
-
-		return products;
 	}
 
 	@Override
@@ -106,4 +95,13 @@ public class ProductServiceIMPL implements ProductService {
 		return new ResponseEntity<>(responseStructure, HttpStatus.OK);
 	}
 
+
+	private Product mapToProduct(ProductRequest request, Product product) {
+
+		product.setProductName(request.getProductName());
+		product.setProductPrice(request.getProductPrice());
+
+		return product;
+	}
+	
 }

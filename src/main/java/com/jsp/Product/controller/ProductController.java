@@ -13,40 +13,55 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.jsp.Product.Entity.Product;
-import com.jsp.Product.RequestDTOs.ProductRequest;
-import com.jsp.Product.Utility.ResponseStructure;
+import com.jsp.Product.requestdtos.ProductRequest;
 import com.jsp.Product.service.ProductService;
+import com.jsp.Product.utility.ErrorStructure;
+import com.jsp.Product.utility.ResponseStructure;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @Controller
 public class ProductController {
-	
+
 	@Autowired
 	private ProductService productService;
-	
-	@PostMapping("/saveProduct")
+
+	@Operation(description = "The endpoints is used for add new product in side the database.",
+			responses = {@ApiResponse (responseCode = "400", description = "Invalid Inputs."),
+					@ApiResponse (responseCode = "200",description = "Product saved Successfully!!!")})
+	@PostMapping("/products")
 	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody ProductRequest request){
 		return productService.saveProduct(request);
 	}
-	
-	@DeleteMapping("/product/{productId}")
+
+	@DeleteMapping("/products/{productId}")
 	public ResponseEntity<ResponseStructure<Product>> deleteProduct(@PathVariable int productId){
 		return productService.deleteProduct(productId);
 	}
-	
-	@GetMapping("/product/{productId}") 
+
+	@Operation(description = "The endpoints is used to fatch the products based on productId.", 
+			responses = {@ApiResponse (responseCode = "200", description = "Product fatch Successfully!!"),
+					@ApiResponse (responseCode = "404", description = "Product Not Found By Given Id.", 
+					content = {@Content(schema = @Schema(implementation = ErrorStructure.class))
+					})
+	})
+	@GetMapping("/products/{productId}") 
 	public ResponseEntity<ResponseStructure<Product>> findProductById(@PathVariable int productId){
 		return productService.findProductById(productId);
 	}
-	
-	@GetMapping("/product") 
-	public ResponseEntity<ResponseStructure<List<Product>>> findAllProducts(){
+
+	@GetMapping("/products")  
+	public ResponseEntity<ResponseStructure<List<Product>>> findAllProducts() {
 		return productService.findAllProducts();
 	}
-	
-	@PutMapping("/product")
+
+	@PutMapping("/products")
 	public ResponseEntity<ResponseStructure<Product>> updateProduct(int productId,@RequestBody Product product){
 		return productService.updateProduct(productId, product);
 	}
 
-	
+
 }
